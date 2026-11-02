@@ -129,16 +129,17 @@ function tensorToImage(tensor) {
         g = data[base + width * height];
         b = data[base + 2 * width * height];
       }
-      const clamp = v => Math.max(0, Math.min(255, Math.round((v + 1) * 127.5)));
+      // Model outputs [0, 1]
+      const toByte = v => Math.max(0, Math.min(255, Math.round(v * 255)));
       const i = (y * width + x) * 4;
-      pixels[i] = clamp(r);
-      pixels[i + 1] = clamp(g);
-      pixels[i + 2] = clamp(b);
+      pixels[i] = toByte(r);
+      pixels[i + 1] = toByte(g);
+      pixels[i + 2] = toByte(b);
       pixels[i + 3] = 255;
     }
   }
   ctx.putImageData(imgData, 0, 0);
-  return canvas.toDataURL('image/jpeg', 0.85);
+  return canvas.toDataURL('image/jpeg', 0.92);
 }
 
 async function generate() {
