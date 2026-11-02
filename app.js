@@ -1,7 +1,7 @@
-// ort is loaded globally via script tag in index.html
-const ort = window.ort;
+// ort is provided globally by the script tag in index.html
+const ORT = window.ort;
 
-ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/';
+ORT.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/';
 
 const MODELS = {
   landscapes: 'https://huggingface.co/utkucoban/NanoDreamer/resolve/main/NanoDreamer-onnx/NanoDreamerLandscapes-FP16.onnx',
@@ -67,7 +67,7 @@ async function loadModel(key) {
       session = null;
     }
     const url = MODELS[key];
-    session = await ort.InferenceSession.create(url, {
+    session = await ORT.InferenceSession.create(url, {
       executionProviders: ['webgpu', 'wasm']
     });
     currentModel = key;
@@ -91,8 +91,8 @@ function randomLatent() {
 }
 
 async function generateOne() {
-  const latent = new ort.Tensor('float32', randomLatent(), [1, 512]);
-  const truncation = new ort.Tensor('float32', new Float32Array([parseFloat(truncSlider.value)]), [1]);
+  const latent = new ORT.Tensor('float32', randomLatent(), [1, 512]);
+  const truncation = new ORT.Tensor('float32', new Float32Array([parseFloat(truncSlider.value)]), [1]);
   const feeds = { latent, truncation };
   const results = await session.run(feeds);
   const imageTensor = results.image;
