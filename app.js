@@ -1,6 +1,7 @@
-import * as ort from 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/esm/ort.webgpu.min.js';
+// ort is loaded globally via script tag in index.html
+const ort = window.ort;
 
-ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/';
+ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/';
 
 const MODELS = {
   landscapes: 'https://huggingface.co/utkucoban/NanoDreamer/resolve/main/NanoDreamer-onnx/NanoDreamerLandscapes-FP16.onnx',
@@ -101,7 +102,7 @@ async function generateOne() {
 function tensorToImage(tensor) {
   const data = tensor.data;
   const dims = tensor.dims;
-  let height = 256, width = 256, channels = 3;
+  let height = 256, width = 256;
   if (dims.length === 4) {
     if (dims[3] === 3) {
       height = dims[1]; width = dims[2];
